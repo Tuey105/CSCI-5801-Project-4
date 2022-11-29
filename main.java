@@ -13,6 +13,8 @@ import javax.swing.text.BadLocationException;
 import org.w3c.dom.events.MouseEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 class ppalms extends JFrame implements ActionListener, MouseListener{
     // Text component
@@ -23,6 +25,9 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
 
     // File
     File f;
+
+    // Arraylist for selected lines
+    ArrayList linesArraylist = new ArrayList<String>();
  
     // Constructor
     ppalms()
@@ -117,11 +122,17 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
                 JOptionPane.showMessageDialog(frame, "the user cancelled the operation");
         }
         else if (s.equals("Generate")){
-            //Read text area
-            String fileText = t.getText();
 
-            //Store lines in an array
-            String lines[] = fileText.split("\\r?\\n");
+            //Use linesArrayList and convert to array Or use whole textarea and store to array
+            String lines[];
+            if(!linesArraylist.isEmpty()){
+                Object tempArray[] = linesArraylist.toArray();
+                lines = Arrays.copyOf(tempArray, tempArray.length, String[].class);
+            }
+            else{
+                String fileText = t.getText();
+                lines = fileText.split("\\r?\\n");
+            }
 
             //Randomize array
             Random r = new Random();
@@ -147,23 +158,6 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             System.out.println("file generate success");
         }
     }
-    // public void highlightText(JTextArea textComp, String pattern){
-    //     try{
-    //         DefaultHighlightPainter yellow = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
-    //         Highlighter hilite = textComp.getHighlighter();
-    //         Document doc = textComp.getDocument();
-    //         String text = doc.getText(0, doc.getLength());
-    //         int pos = 0;
-    //         while((pos = text.indexOf(pattern,pos)) >= 0){
-    //             System.out.println(pos);
-    //             hilite.addHighlight(pos, pos + pattern.length(), yellow);
-    //         }
-    //     }
-    //     catch(BadLocationException ex){
-    //         System.err.println("NO NO");
-    //     }
-    // }
-    // Main class
     public static void main(String args[])
     {
         ppalms p = new ppalms();
@@ -194,6 +188,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             String selectedText = t.getSelectedText();
             Highlighter highLight = t.getHighlighter();
             highLight.addHighlight(wholeText.indexOf(selectedText), wholeText.indexOf(selectedText) + selectedText.length(), yellow);
+            linesArraylist.add(selectedText);
         }
         catch(BadLocationException ex){
             System.err.println("NO NO");
