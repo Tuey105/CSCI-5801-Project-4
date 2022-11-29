@@ -1,10 +1,20 @@
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
+
 import java.io.*;
 import java.awt.event.*;
 import javax.swing.plaf.metal.*;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Document;
+import javax.swing.text.Highlighter;
+import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
+import javax.swing.text.Highlighter.Highlight;
+import javax.swing.text.BadLocationException;
+import org.w3c.dom.events.MouseEvent;
+
 import java.awt.*;
 import java.util.Random;
-class ppalms extends JFrame implements ActionListener {
+class ppalms extends JFrame implements ActionListener, MouseListener{
     // Text component
     JTextArea t;
  
@@ -50,6 +60,8 @@ class ppalms extends JFrame implements ActionListener {
         // Create scrollbar
         JScrollPane scroll = new JScrollPane(t, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
+        t.addMouseListener(this);
+
         t.setLineWrap(true);
         t.setWrapStyleWord(true);
         frame.setJMenuBar(mb);
@@ -57,7 +69,7 @@ class ppalms extends JFrame implements ActionListener {
         frame.setSize(500, 500);
         frame.setVisible(true);
     }
- 
+    
     // If a button is pressed
     public void actionPerformed(ActionEvent e)
     {
@@ -135,10 +147,69 @@ class ppalms extends JFrame implements ActionListener {
             System.out.println("file generate success");
         }
     }
- 
+    // public void highlightText(JTextArea textComp, String pattern){
+    //     try{
+    //         DefaultHighlightPainter yellow = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+    //         Highlighter hilite = textComp.getHighlighter();
+    //         Document doc = textComp.getDocument();
+    //         String text = doc.getText(0, doc.getLength());
+    //         int pos = 0;
+    //         while((pos = text.indexOf(pattern,pos)) >= 0){
+    //             System.out.println(pos);
+    //             hilite.addHighlight(pos, pos + pattern.length(), yellow);
+    //         }
+    //     }
+    //     catch(BadLocationException ex){
+    //         System.err.println("NO NO");
+    //     }
+    // }
     // Main class
     public static void main(String args[])
     {
         ppalms p = new ppalms();
+    }
+
+
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    @Override
+    public void mousePressed(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
+        // System.out.println(e.getSource());
+
+    }
+
+
+    @Override
+    public void mouseReleased(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
+        try{
+            DefaultHighlightPainter yellow = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+            String wholeText = t.getText();
+            String selectedText = t.getSelectedText();
+            Highlighter highLight = t.getHighlighter();
+            highLight.addHighlight(wholeText.indexOf(selectedText), wholeText.indexOf(selectedText) + selectedText.length(), yellow);
+        }
+        catch(BadLocationException ex){
+            System.err.println("NO NO");
+        }
+    }
+
+    @Override
+    public void mouseEntered(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    @Override
+    public void mouseExited(java.awt.event.MouseEvent e) {
+        // TODO Auto-generated method stub
+        
     }
 }
