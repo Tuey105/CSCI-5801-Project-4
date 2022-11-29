@@ -16,12 +16,13 @@ class ppalmsTest {
     }
 
     @org.junit.jupiter.api.Test
-    void main() {
+    //can change these names "test" and "anothertest"
+    void test() {
 
     }
 
     @org.junit.jupiter.api.Test
-    void mouseReleased() {
+    void anothertest() {
 
     }
 }
