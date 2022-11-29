@@ -16,13 +16,24 @@ class ppalmsTest {
     }
 
     @org.junit.jupiter.api.Test
-    //can change these names "test" and "anothertest"
-    void test() {
-
+    void highlighting() {
+        ppalms p = new ppalms();
+        ActionEvent e = new ActionEvent(new Object(), 0, "Import");
+        p.actionPerformed(e);
+        String highlight = p.t.getSelectedText();
+        assertNotEquals("",highlight);
     }
 
     @org.junit.jupiter.api.Test
-    void anothertest() {
-
+    void generating() throws IOException {
+        ppalms p = new ppalms();
+        ActionEvent e = new ActionEvent(new Object(), 0, "Import");
+        p.actionPerformed(e);
+        ActionEvent a = new ActionEvent(new Object(), 0, "Generate");
+        p.actionPerformed(a);
+        FileReader fr = new FileReader("generatedParsonProblems.txt");
+        char[] buf = new char[50];
+        fr.read(buf);
+        assertNotEquals('\0',buf[1]);
     }
 }
