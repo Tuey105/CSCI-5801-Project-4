@@ -1,0 +1,12 @@
+ROOTY-PRINT(root)
+    print (ROOTY-HELPER(root, 1, root.length))
+
+ROOTY-HELPER(root, i, j)  
+
+    if j == i - 1
+        return "d" + j
+
+    else
+        return "k" + root[i][j] + "(" +  ROOTY-HELPER(root, i, root[i][j] - 1) + "," + ROOTY-HELPER(root, root[i][j] + 1, j) + ")"
+
+    
