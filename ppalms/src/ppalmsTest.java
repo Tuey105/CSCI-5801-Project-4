@@ -11,7 +11,6 @@ class ppalmsTest {
     void importing() {
         ppalms p = new ppalms();
         ActionEvent e = new ActionEvent(new Object(), 0, "Import");
-        //p.f = new File("/../generatedParsonProblems.txt");
         p.actionPerformed(e);
         String text = p.t.getText();
         assertNotEquals("",text);

@@ -12,14 +12,16 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+// Class for PPALMS {Design Document 4.2.2}
 class ppalms extends JFrame implements ActionListener, MouseListener{
-    // Text component
+
+    // Text area
     JTextArea t;
 
     // Frame
     JFrame frame;
 
-    // File
+    // File for importing
     File f;
 
     // annotation class
@@ -28,24 +30,11 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
     // Constructor
     ppalms()
     {
+
+        //Intialization
         f = null;
-
         annotate = new annotation();
-
-        // Create a frame
         frame = new JFrame("PPALMS");
-
-        try {
-            // Set metal look and feel
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-
-            // Set theme to ocean
-            MetalLookAndFeel.setCurrentTheme(new OceanTheme());
-        }
-        catch (Exception e) {
-        }
-
-        // Text component
         t = new JTextArea();
 
         // Create a menubar
@@ -56,6 +45,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         i.addActionListener(this);
         mb.add(i);
 
+        // Create generate button
         JMenuItem generate = new JMenuItem("Generate");
         generate.addActionListener(this);
         mb.add(generate);
@@ -63,18 +53,22 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         // Create scrollbar
         JScrollPane scroll = new JScrollPane(t, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
+        // Text area properties
         t.addMouseListener(this);
-
         t.setLineWrap(true);
         t.setWrapStyleWord(true);
+
+        //  Frame properties
         frame.setJMenuBar(mb);
         frame.add(scroll);
-        frame.setSize(500, 500);
+        frame.setSize(1000, 1000);
         frame.setVisible(true);
     }
 
+    // Function for importing file {Design Document 4.2.2.2}
     public void importFile(){
 
+        // Clearing all selected lines from previous import
         annotate.selectedLines.clear();
 
         // Create an object of JFileChooser class
@@ -89,16 +83,9 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             f = new File(j.getSelectedFile().getAbsolutePath());
 
             try {
-                // String
-                String s1 = "", sl = "";
-
-                // File reader
+                String s1, sl;
                 FileReader fr = new FileReader(f);
-
-                // Buffered reader
                 BufferedReader br = new BufferedReader(fr);
-
-                // Initialize sl
                 sl = br.readLine();
 
                 // Take the input from the file
@@ -118,9 +105,12 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             JOptionPane.showMessageDialog(frame, "the user cancelled the operation");
     }
 
+    // Function for generating parson problems object {Design Document 4.2.2.2}
     public void generate(){
-        //Use linesArrayList and convert to array Or use whole textarea and store to array
+
         String lines[];
+
+        // Use annotate's selectedLines and convert to array
         if(!annotate.selectedLines.isEmpty()){
             for(int i = 0; i < annotate.selectedLines.size(); i++){
                 String elementLines[] = annotate.selectedLines.get(i).toString().split("\\r?\\n");
@@ -129,10 +119,11 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
                     annotate.selectedLines.add(elementLines[j]);
                 }
             }
-            //ArrayList copyArray = (ArrayList) annotate.selectedLines.clone();
             Object tempArray[] = annotate.selectedLines.toArray();
             lines = Arrays.copyOf(tempArray, tempArray.length, String[].class);
         }
+
+        // Or use whole text area and store to array
         else{
             String fileText = t.getText();
             lines = fileText.split("\\r?\\n");
@@ -147,8 +138,11 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             lines[i] = temp;
         }
 
+        // Write randomized array of lines to file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("generatedParsonProblems.txt", false))) {
             for(int i = 0; i < lines.length; i++){
+
+                // Exclude comments
                 if(!lines[i].contains("//")){
                     writer.write(lines[i]);
                     writer.newLine();
@@ -166,49 +160,42 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
     {
         String s = e.getActionCommand();
 
+        // Action for import button pressed
         if (s.equals("Import")) {
             importFile();
         }
+
+        // Action for generate button pressed
         else if (s.equals("Generate")){
             generate();
         }
     }
     public static void main(String args[])
     {
+        // PPALMS Object Creation
         ppalms p = new ppalms();
     }
 
 
     @Override
-    public void mouseClicked(java.awt.event.MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
+    public void mouseClicked(java.awt.event.MouseEvent e) {}
 
 
     @Override
-    public void mousePressed(java.awt.event.MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
+    public void mousePressed(java.awt.event.MouseEvent e) {}
 
 
     @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
-        // TODO Auto-generated method stub
+
+        //Highlight selected lines
         annotate.highlightLines(t);
     }
 
     @Override
-    public void mouseEntered(java.awt.event.MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
+    public void mouseEntered(java.awt.event.MouseEvent e) {}
 
 
     @Override
-    public void mouseExited(java.awt.event.MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
+    public void mouseExited(java.awt.event.MouseEvent e) {}
 }
