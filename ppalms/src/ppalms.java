@@ -16,13 +16,13 @@ import java.util.Random;
 class ppalms extends JFrame implements ActionListener, MouseListener{
 
     // Text area
-    JTextArea t;
+    JTextArea text;
 
     // Frame
     JFrame frame;
 
     // File for importing
-    File f;
+    File file;
 
     // annotation class
     annotation annotate;
@@ -32,18 +32,18 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
     {
 
         //Intialization
-        f = null;
+        file = null;
         annotate = new annotation();
         frame = new JFrame("PPALMS");
-        t = new JTextArea();
+        text = new JTextArea();
 
         // Create a menubar
         JMenuBar mb = new JMenuBar();
 
         // Create import button
-        JMenuItem i = new JMenuItem("Import");
-        i.addActionListener(this);
-        mb.add(i);
+        JMenuItem importButton = new JMenuItem("Import");
+        importButton.addActionListener(this);
+        mb.add(importButton);
 
         // Create generate button
         JMenuItem generate = new JMenuItem("Generate");
@@ -51,12 +51,12 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         mb.add(generate);
 
         // Create scrollbar
-        JScrollPane scroll = new JScrollPane(t, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scroll = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Text area properties
-        t.addMouseListener(this);
-        t.setLineWrap(true);
-        t.setWrapStyleWord(true);
+        text.addMouseListener(this);
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
 
         //  Frame properties
         frame.setJMenuBar(mb);
@@ -72,19 +72,19 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         annotate.selectedLines.clear();
 
         // Create an object of JFileChooser class
-        JFileChooser j = new JFileChooser("f:");
+        JFileChooser fileChooser = new JFileChooser("f:");
 
         // Invoke the showsOpenDialog function to show the save dialog
-        int r = j.showOpenDialog(null);
+        int r = fileChooser.showOpenDialog(null);
 
         // If the user selects a file
         if (r == JFileChooser.APPROVE_OPTION) {
             // Set the label to the path of the selected directory
-            f = new File(j.getSelectedFile().getAbsolutePath());
+            file = new File(fileChooser.getSelectedFile().getAbsolutePath());
 
             try {
                 String s1, sl;
-                FileReader fr = new FileReader(f);
+                FileReader fr = new FileReader(file);
                 BufferedReader br = new BufferedReader(fr);
                 sl = br.readLine();
 
@@ -94,7 +94,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
                 }
 
                 // Set the text
-                t.setText(sl);
+                text.setText(sl);
             }
             catch (Exception evt) {
                 JOptionPane.showMessageDialog(frame, evt.getMessage());
@@ -125,7 +125,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
 
         // Or use whole text area and store to array
         else{
-            String fileText = t.getText();
+            String fileText = text.getText();
             lines = fileText.split("\\r?\\n");
         }
 
@@ -141,7 +141,6 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         // Write randomized array of lines to file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("generatedParsonProblems.txt", false))) {
             for(int i = 0; i < lines.length; i++){
-
                 // Exclude comments
                 if(!lines[i].contains("//")){
                     writer.write(lines[i]);
@@ -189,7 +188,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
     public void mouseReleased(java.awt.event.MouseEvent e) {
 
         //Highlight selected lines
-        annotate.highlightLines(t);
+        annotate.highlightLines(text);
     }
 
     @Override
