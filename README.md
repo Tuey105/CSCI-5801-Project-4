@@ -3,7 +3,7 @@
 This system is created to generate parson problems out of source code files. This system can be compiled and executed in command line or IntelliJ, although unit tests needs Intellij to execute unit tests.
 
 ### To Compile and Execute in command line:
-- Run "javac main.java" 
+- Run "javac ppalms.java" 
 - Run "java ppalms"
 
 ### To Compile and Excute in Intellij:
