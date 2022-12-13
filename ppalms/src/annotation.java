@@ -27,8 +27,8 @@ public class annotation {
         DefaultHighlighter.DefaultHighlightPainter yellow = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 
         // Fetching selected text, the whole text, and the highlighter object from text area
-        String wholeText = t.getText();
-        String selectedText = t.getSelectedText();
+        String wholeText = t.getText().trim();
+        String selectedText = t.getSelectedText().trim();
         Highlighter highLight = t.getHighlighter();
 
         // Excluding when user selects no lines
