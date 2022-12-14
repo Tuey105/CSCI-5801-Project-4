@@ -27,15 +27,17 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
     // annotation class
     annotation annotate;
 
+    // Variable for problem type to generate
     String type;
 
+    // Text field for input number
     JTextField inputNum;
 
     // Constructor
     ppalms()
     {
 
-        //Intialization
+        // Initialization
         file = null;
         annotate = new annotation();
         frame = new JFrame("PPALMS");
@@ -43,7 +45,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         type = "reorder";
         inputNum = new JTextField("Enter Amount");
 
-        // Create a menubar
+        // Create a menu bar
         JMenuBar mb = new JMenuBar();
 
         // Create import button
@@ -51,22 +53,29 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         importButton.addActionListener(this);
         mb.add(importButton);
 
+        // Create problem type drop down menu
         JMenu problemType = new JMenu("Problem Type");
 
+        // Create reorder button
         JMenuItem reorder = new JMenuItem("Reorder");
         reorder.addActionListener(this);
         problemType.add(reorder);
 
+
+        // Create multiple choice button
         JMenuItem mc = new JMenuItem("Multiple Choice");
         mc.addActionListener(this);
         problemType.add(mc);
 
+        // Create fill in the blank button
         JMenuItem fb = new JMenuItem("Fill in the Blank");
         fb.addActionListener(this);
         problemType.add(fb);
 
+        // Add problem type drop down menu to menu bar
         mb.add(problemType);
 
+        // Add input number text field to menu bar
         mb.add(inputNum);
 
         // Create generate button
@@ -153,13 +162,15 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             annotatedLines = fileText.split("\\r?\\n");
         }
 
+        // Generation of reorder parson problems
         if(type.equals("reorder")){
 
             // Write randomized array of annotatedLines to file
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("generatedParsonProblems.txt", false))) {
+                //loop through number of parson problems to generate
                 for(int numpp = 0; numpp < num; numpp++){
 
-                    //Randomize array
+                    // Randomize array
                     Random r = new Random();
                     for(int i = 0; i < annotatedLines.length; i++){
                         int randindex = r.nextInt(annotatedLines.length);
@@ -168,6 +179,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
                         annotatedLines[i] = temp;
                     }
 
+                    // Write randomized lines to file
                     for(int i = 0; i < annotatedLines.length; i++){
                         // Exclude comments
                         if(!annotatedLines[i].contains("//")){
@@ -184,14 +196,17 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             System.out.println("file generate success");
         }
 
+        // Generation of multiple choice parson problems
         else if(type.equals("mc")){
+            // Writing multiple choice problems to file
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("generatedParsonProblems.txt", false))) {
                 Random r = new Random();
+                // loop through number of parson problems to generate
                 for(int numpp = 0; numpp < num; numpp++){
                     for(int i = 0; i < annotatedLines.length; i++){
                         // Exclude comments
                         if(!annotatedLines[i].contains("//")){
-
+                            // Choosing random word in line
                             String words[] = annotatedLines[i].split(" ");
                             int randInt = r.nextInt(words.length);
                             String choosenWord = words[randInt];
@@ -200,13 +215,14 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
                                 choosenWord = words[anotherRandInt];
                             }
 
+                            // Replacing chosen word with "_"
                             String blank = "";
                             for(int j = 0; j < choosenWord.length(); j++){
                                 blank += '_';
                             }
-
                             String question = annotatedLines[i].replaceFirst(choosenWord, blank);
 
+                            // Create and Shuffle options
                             ArrayList<String> options = new ArrayList<>();
                             options.add(choosenWord);
                             for(int k = 0 ; k < 3; k++){
@@ -219,9 +235,11 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
                                 options.add(shuffledWord);
                             }
 
+                            // Write question to file
                             writer.write(question);
                             writer.newLine();
 
+                            // Write options under question to file
                             char alphabet = 'a';
                             while(options.size() > 0){
                                 int randIndex = r.nextInt(options.size());
@@ -243,13 +261,17 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             System.out.println("file generate success");
         }
 
+        // Generation of fill in the blank questions
         else if(type.equals("fb")){
+            // Writing multiple choice problems to file
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("generatedParsonProblems.txt", false))) {
                 Random r = new Random();
+                // Loop through number of parson problems to generate
                 for(int numpp = 0; numpp < num; numpp++){
                     for(int i = 0; i < annotatedLines.length; i++){
                         // Exclude comments
                         if(!annotatedLines[i].contains("//")){
+                            // Choose a random word in a line
                             String words[] = annotatedLines[i].split(" ");
                             int randInt = r.nextInt(words.length);
                             String choosenWord = words[randInt];
@@ -258,13 +280,14 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
                                 choosenWord = words[anotherRandInt];
                             }
 
+                            // Replace chosen word in line with blanks
                             String blank = "";
                             for(int j = 0; j < choosenWord.length(); j++){
                                 blank += '_';
                             }
-
                             String question = annotatedLines[i].replaceFirst(choosenWord, blank);
 
+                            // Write parson problem with blanks
                             writer.write(question);
                             writer.newLine();
                             writer.newLine();
@@ -293,12 +316,14 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
         else if (s.equals("Generate")){
             int input = 1;
             String numString = inputNum.getText();
+            // Obtain user input number
             try{
                 input = Integer.valueOf(numString);
             }
             catch(Exception e2){
                 System.out.println("not an int");
             }
+            // Generate parson problems given input number
             generate(input);
         }
 
@@ -312,7 +337,7 @@ class ppalms extends JFrame implements ActionListener, MouseListener{
             type = "mc";
         }
 
-        // Action for multiple choice button pressed
+        // Action for fill in the blank button pressed
         else if (s.equals("Fill in the Blank")){
             type = "fb";
         }
