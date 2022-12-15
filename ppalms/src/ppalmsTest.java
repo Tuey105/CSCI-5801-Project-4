@@ -1,4 +1,4 @@
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -83,6 +83,54 @@ class ppalmsTest {
         //check the first element in txt
         assertNotEquals(text,first);
         //check if is properly randomized
+    }
+    @org.junit.jupiter.api.Test
+    void generating_correcttype() throws IOException {
+        ppalms p = new ppalms();
+        ActionEvent e = new ActionEvent(new Object(), 0, "Import");
+        p.actionPerformed(e);
+        //ask to select Problem Type
+        ActionEvent b = new ActionEvent(new Object(), 0, "Problem Type");
+        p.actionPerformed(b);
+        //ask to select code file
+        ActionEvent a = new ActionEvent(new Object(), 0, "Generate");
+        p.actionPerformed(a);
+        //parson problems generated
+        FileReader fr = new FileReader("generatedParsonProblems.txt");
+        char[] buf = new char[50];
+        fr.read(buf);
+        //read from txt file
+        assertNotEquals('\0',buf[1]);
+        //check if generated correctly
+    }
+
+    @org.junit.jupiter.api.Test
+    void generating_number() throws IOException {
+        ppalms p = new ppalms();
+        //asked to import source code file
+        ActionEvent e = new ActionEvent(new Object(), 0, "Import");
+        p.actionPerformed(e);
+        //check if number of problems can be found
+        String text = p.inputNum.getText();
+        assertNotEquals("",text);
+
+    }
+
+    @org.junit.jupiter.api.Test
+    void generating_checknumber() throws IOException {
+        ppalms p = new ppalms();
+        ActionEvent e = new ActionEvent(new Object(), 0, "Import");
+        p.actionPerformed(e);
+        //ask to select code file
+        ActionEvent a = new ActionEvent(new Object(), 0, "Generate");
+        p.actionPerformed(a);
+        //parson problems generated
+        FileReader fr = new FileReader("generatedParsonProblems.txt");
+        char[] buf = new char[50];
+        fr.read(buf);
+        //read from txt file
+        assertNotEquals('\0',buf[1]);
+
     }
 }
 
